@@ -1,11 +1,26 @@
 import React, { useState } from 'react';
+import useTasks from '../hooks/useTasks';
 
 function AddTask() {
   const [description, setDescription] = useState('');
   const [status, setStatus] = useState('Pendente');
+  const [errorMessage, setErrorMessage] = useState('');
 
-  const submitTask = (event) => {
+  const { createTask } = useTasks();
+
+  const submitTask = async (event) => {
     event.preventDefault();
+
+    if (description) {
+      try {
+        const createdAt = new Date();
+        await createTask({ description, status, createdAt });
+      } catch (error) {
+        setErrorMessage('Houve um problema ao cadastrar a tarefa');
+      }
+
+      setDescription('');
+    }
   };
 
   return (
@@ -30,6 +45,7 @@ function AddTask() {
       <button type="submit">
         Adicionar
       </button>
+      <p>{errorMessage}</p>
     </form>
   );
 }
