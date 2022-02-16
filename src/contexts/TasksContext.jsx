@@ -48,13 +48,43 @@ export function TasksContextProvider({ children }) {
     }
   }, []);
 
+  const editTask = useCallback(async (id, description) => {
+    try {
+      await api.put(`/tasks/${id}`, { description });
+      setTasksList((oldList) => {
+        const tasksListCopy = [...oldList];
+        const taskEdited = tasksListCopy.find(({ _id }) => _id === id);
+        taskEdited.description = description;
+        return tasksListCopy;
+      });
+    } catch (error) {
+      setErrorMessage('Houve um problema ao editar a tarefa');
+    }
+  }, []);
+
+  const editStatus = useCallback(async (id, status) => {
+    try {
+      await api.put(`/tasks/${id}`, { status });
+      setTasksList((oldList) => {
+        const tasksListCopy = [...oldList];
+        const taskEdited = tasksListCopy.find(({ _id }) => _id === id);
+        taskEdited.status = status;
+        return tasksListCopy;
+      });
+    } catch (error) {
+      setErrorMessage('Houve um problema ao alterar o status da tarefa');
+    }
+  }, []);
+
   const value = useMemo(() => ({
     createTask,
     errorMessage,
     loading,
     tasksList,
     removeTask,
-  }), [createTask, errorMessage, loading, tasksList, removeTask]);
+    editTask,
+    editStatus,
+  }), [createTask, errorMessage, loading, tasksList, removeTask, editTask, editStatus]);
 
   return (
     <TasksContext.Provider value={value}>
