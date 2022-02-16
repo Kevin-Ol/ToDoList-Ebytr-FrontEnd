@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+import moment from 'moment';
 import useTasks from '../hooks/useTasks';
 
 function TaskItem({
@@ -34,7 +35,7 @@ function TaskItem({
         />
       )}
       <span>{status}</span>
-      <span>{createdAt}</span>
+      <span>{moment(createdAt).format('DD/MM/YYYY, HH:mm')}</span>
       { !editMode && (
         <>
           <button type="button" onClick={() => changeStatus('Pronto')}>Pronto</button>
