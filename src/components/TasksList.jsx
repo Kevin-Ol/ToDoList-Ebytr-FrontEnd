@@ -16,6 +16,7 @@ function TasksList() {
       }) => (
         <TaskItem
           key={id}
+          id={id}
           description={description}
           status={status}
           createdAt={createdAt}

@@ -33,12 +33,28 @@ export function TasksContextProvider({ children }) {
     }
   }, []);
 
+  const removeTask = useCallback(async (id) => {
+    try {
+      await api.delete(`/tasks/${id}`);
+
+      setTasksList((oldList) => {
+        const tasksListCopy = [...oldList];
+        const taskIndex = tasksListCopy.findIndex(({ _id }) => _id === id);
+        tasksListCopy.splice(taskIndex, 1);
+        return tasksListCopy;
+      });
+    } catch (error) {
+      setErrorMessage('Houve um problema ao remover a tarefa');
+    }
+  }, []);
+
   const value = useMemo(() => ({
     createTask,
     errorMessage,
     loading,
     tasksList,
-  }), [createTask, errorMessage, loading, tasksList]);
+    removeTask,
+  }), [createTask, errorMessage, loading, tasksList, removeTask]);
 
   return (
     <TasksContext.Provider value={value}>
