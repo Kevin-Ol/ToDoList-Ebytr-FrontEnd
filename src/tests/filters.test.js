@@ -2,6 +2,7 @@ import React from 'react';
 import axios from 'axios';
 import '@testing-library/jest-dom';
 import { screen, waitFor, render } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import App from '../App';
 import moment from 'moment';
 
@@ -12,6 +13,14 @@ jest.mock('axios', () => ({
   delete: jest.fn(() => Promise.resolve()),
   put: jest.fn(() => Promise.resolve()),
 }));
+
+const filterElements = () => {
+  const sortDescriptionBtn = screen.getByTestId('sort-description');
+  const sortStatusBtn = screen.getByTestId('sort-status');
+  const sortDateBtn = screen.getByTestId('sort-date');
+
+  return { sortDescriptionBtn, sortStatusBtn, sortDateBtn };
+};
 
 const taskItemsElements = (index) => {
   const taskDescription = screen.queryByTestId(`task-description-${index}`);
@@ -40,7 +49,7 @@ const taskItemsElements = (index) => {
   };
 };
 
-describe('2 - Renderização de tarefas', () => {
+describe('5 - Ordenação de tarefas', () => {
   const tasks = [
     {
       _id: "620d6cfe82fa814f0868e3e8",
@@ -68,7 +77,6 @@ describe('2 - Renderização de tarefas', () => {
     },
   ]
 
-  describe('Renderiza todas os itens das tarefas corretamente', () => {
     beforeEach(async () => {
       axios.get.mockImplementationOnce(() =>
         Promise.resolve({ data: { tasks } }),
@@ -85,7 +93,13 @@ describe('2 - Renderização de tarefas', () => {
       jest.clearAllMocks()
     });
 
-    it('Todas tarefas possuem descrição, status, data, botões para mudança de estado, botão de edição e botão de remoção', () => {
+    it('Ordena tarefas por descrição corretamente', () => {
+      const { sortDescriptionBtn } = filterElements();
+
+      userEvent.click(sortDescriptionBtn);
+
+      tasks.sort((a, b) => a['description'].localeCompare(b['description']));
+
       for (let index = 0; index < tasks.length; index += 1) {
         const {     
           taskDescription,
@@ -108,5 +122,64 @@ describe('2 - Renderização de tarefas', () => {
         expect(removeBtn).toBeInTheDocument();
       };
     });
-  });
+
+    it('Ordena tarefas por descrição status', () => {
+      const { sortDescriptionBtn, sortStatusBtn, sortDateBtn } = filterElements();
+
+      userEvent.click(sortStatusBtn);
+
+      tasks.sort((a, b) => a['status'].localeCompare(b['status']));
+
+      for (let index = 0; index < tasks.length; index += 1) {
+        const {     
+          taskDescription,
+          taskStatus,
+          taskDate,
+          readyBtn,
+          ongoingBtn,
+          pendingBtn,
+          editBtn,
+          removeBtn,  } = taskItemsElements(index);
+
+        expect(axios.post).not.toHaveBeenCalled();
+        expect(taskDescription).toHaveTextContent(tasks[index].description);
+        expect(taskStatus).toHaveTextContent(tasks[index].status);
+        expect(taskDate).toHaveTextContent(moment(tasks[index].createdAt).format('DD/MM/YYYY, HH:mm'));
+        expect(readyBtn).toBeInTheDocument();
+        expect(ongoingBtn).toBeInTheDocument();
+        expect(pendingBtn).toBeInTheDocument();
+        expect(editBtn).toBeInTheDocument();
+        expect(removeBtn).toBeInTheDocument();
+      };
+    });
+
+    it('Ordena tarefas por data de criação corretamente', () => {
+      const { sortDateBtn } = filterElements();
+
+      userEvent.click(sortDateBtn);
+
+      tasks.sort((a, b) => a['createdAt'].localeCompare(b['createdAt']));
+
+      for (let index = 0; index < tasks.length; index += 1) {
+        const {     
+          taskDescription,
+          taskStatus,
+          taskDate,
+          readyBtn,
+          ongoingBtn,
+          pendingBtn,
+          editBtn,
+          removeBtn,  } = taskItemsElements(index);
+
+        expect(axios.post).not.toHaveBeenCalled();
+        expect(taskDescription).toHaveTextContent(tasks[index].description);
+        expect(taskStatus).toHaveTextContent(tasks[index].status);
+        expect(taskDate).toHaveTextContent(moment(tasks[index].createdAt).format('DD/MM/YYYY, HH:mm'));
+        expect(readyBtn).toBeInTheDocument();
+        expect(ongoingBtn).toBeInTheDocument();
+        expect(pendingBtn).toBeInTheDocument();
+        expect(editBtn).toBeInTheDocument();
+        expect(removeBtn).toBeInTheDocument();
+      };
+    });
 });

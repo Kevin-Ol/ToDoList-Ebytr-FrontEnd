@@ -13,14 +13,6 @@ jest.mock('axios', () => ({
   put: jest.fn(() => Promise.resolve()),
 }));
 
-const formElements = () => {
-  const descriptionInput = screen.getByTestId('description-input');
-  const statusInput = screen.getByTestId('status-input');
-  const addBtn = screen.getByTestId('add-btn');
-
-  return { descriptionInput, statusInput, addBtn };
-};
-
 const taskItemsElements = (index) => {
   const taskDescription = screen.queryByTestId(`task-description-${index}`);
   const taskEditInput = screen.queryByTestId(`task-description-input-${index}`);
