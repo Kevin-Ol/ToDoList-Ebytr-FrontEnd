@@ -13,13 +13,14 @@ function TasksList() {
     <ul>
       {tasksList.map(({
         description, status, createdAt, _id: id,
-      }) => (
+      }, index) => (
         <TaskItem
           key={id}
           id={id}
           description={description}
           status={status}
           createdAt={createdAt}
+          index={index}
         />
       ))}
     </ul>

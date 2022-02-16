@@ -4,7 +4,7 @@ import moment from 'moment';
 import useTasks from '../hooks/useTasks';
 
 function TaskItem({
-  description, status, createdAt, id,
+  description, status, createdAt, id, index,
 }) {
   const { removeTask, editTask, editStatus } = useTasks();
   const [editMode, setEditMode] = useState(false);
@@ -22,7 +22,7 @@ function TaskItem({
   return (
     <li>
       { !editMode && (
-        <span>{description}</span>
+        <span data-testid={`task-description-${index}`}>{description}</span>
       )}
 
       { editMode && (
@@ -32,23 +32,62 @@ function TaskItem({
           autoFocus
           onChange={({ target: { value } }) => setEditedDescription(value)}
           id="description"
+          data-testid={`task-description-input-${index}`}
         />
       )}
-      <span>{status}</span>
-      <span>{moment(createdAt).format('DD/MM/YYYY, HH:mm')}</span>
+      <span data-testid={`task-status-${index}`}>{status}</span>
+      <span data-testid={`task-date-${index}`}>
+        {moment(createdAt).format('DD/MM/YYYY, HH:mm')}
+      </span>
       { !editMode && (
         <>
-          <button type="button" onClick={() => changeStatus('Pronto')}>Pronto</button>
-          <button type="button" onClick={() => changeStatus('Em andamento')}>Em andamento</button>
-          <button type="button" onClick={() => changeStatus('Pendente')}>Pendente</button>
-          <button type="button" onClick={() => setEditMode(!editMode)}>Editar</button>
-          <button type="button" onClick={() => removeTask(id)}>Remover</button>
+          <button
+            type="button"
+            onClick={() => changeStatus('Pronto')}
+            data-testid={`ready-btn-${index}`}
+          >
+            Pronto
+          </button>
+          <button
+            type="button"
+            onClick={() => changeStatus('Em andamento')}
+            data-testid={`ongoing-btn-${index}`}
+          >
+            Em andamento
+          </button>
+          <button
+            type="button"
+            onClick={() => changeStatus('Pendente')}
+            data-testid={`pending-btn-${index}`}
+          >
+            Pendente
+          </button>
+          <button
+            type="button"
+            onClick={() => setEditMode(!editMode)}
+            data-testid={`edit-btn-${index}`}
+          >
+            Editar
+          </button>
+          <button
+            type="button"
+            onClick={() => removeTask(id)}
+            data-testid={`remove-btn-${index}`}
+          >
+            Remover
+          </button>
         </>
 
       )}
 
       { editMode && (
-      <button type="button" onClick={finishEdit}>Finalizar</button>
+      <button
+        type="button"
+        onClick={finishEdit}
+        data-testid={`finish-btn-${index}`}
+      >
+        Finalizar
+      </button>
       )}
     </li>
   );
@@ -60,4 +99,5 @@ TaskItem.propTypes = {
   status: PropTypes.string.isRequired,
   createdAt: PropTypes.string.isRequired,
   id: PropTypes.string.isRequired,
+  index: PropTypes.number.isRequired,
 };

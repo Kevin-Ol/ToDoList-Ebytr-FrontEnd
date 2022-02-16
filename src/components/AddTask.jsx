@@ -26,17 +26,19 @@ function AddTask() {
           value={description}
           onChange={({ target: { value } }) => setDescription(value)}
           id="description"
+          data-testid="description-input"
         />
       </label>
       <select
         value={status}
         onChange={({ target: { value } }) => setStatus(value)}
+        data-testid="status-input"
       >
         <option value="Pendente">Pendente</option>
         <option value="Em andamento">Em andamento</option>
         <option value="Pronto">Pronto</option>
       </select>
-      <button type="submit">
+      <button type="submit" data-testid="add-btn">
         Adicionar
       </button>
       <p>{errorMessage}</p>
