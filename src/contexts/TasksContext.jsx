@@ -76,6 +76,14 @@ export function TasksContextProvider({ children }) {
     }
   }, []);
 
+  const sortBy = (field) => {
+    setTasksList((oldList) => {
+      const tasksListCopy = [...oldList];
+      tasksListCopy.sort((a, b) => a[field].localeCompare(b[field]));
+      return tasksListCopy;
+    });
+  };
+
   const value = useMemo(() => ({
     createTask,
     errorMessage,
@@ -84,7 +92,8 @@ export function TasksContextProvider({ children }) {
     removeTask,
     editTask,
     editStatus,
-  }), [createTask, errorMessage, loading, tasksList, removeTask, editTask, editStatus]);
+    sortBy,
+  }), [createTask, errorMessage, loading, tasksList, removeTask, editTask, editStatus, sortBy]);
 
   return (
     <TasksContext.Provider value={value}>
