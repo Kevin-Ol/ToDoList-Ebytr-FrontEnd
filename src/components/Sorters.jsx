@@ -1,8 +1,8 @@
 import React from 'react';
 import useTasks from '../hooks/useTasks';
-import SortDiv from './filtersStyles';
+import SortDiv from './sortersStyles';
 
-function Filters() {
+function Sorters() {
   const { sortBy } = useTasks();
 
   return (
@@ -35,4 +35,4 @@ function Filters() {
 
   );
 }
-export default Filters;
+export default Sorters;

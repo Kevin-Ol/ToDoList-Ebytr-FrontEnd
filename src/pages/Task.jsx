@@ -1,7 +1,7 @@
 import React from 'react';
 import AddTask from '../components/AddTask';
 import TasksList from '../components/TasksList';
-import Filters from '../components/Filters';
+import Sorters from '../components/Sorters';
 import { TasksContextProvider } from '../contexts/TasksContext';
 import Main from './taskStyles';
 
@@ -11,7 +11,7 @@ function Task() {
       <TasksContextProvider>
         <h1>Lista de Tarefas</h1>
         <AddTask />
-        <Filters />
+        <Sorters />
         <TasksList />
       </TasksContextProvider>
     </Main>

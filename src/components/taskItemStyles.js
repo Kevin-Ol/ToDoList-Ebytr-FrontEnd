@@ -11,7 +11,7 @@ const TaskLi = styled.li`
   margin-bottom: 1rem;
   border-radius: 12px;
   box-shadow: 0 0 1rem rgba(0, 0, 0, 0.5);
-
+  align-items: center;
   grid-template-columns: 35fr 20fr 25fr 20fr;
 
   ${(props) => props.header
@@ -35,7 +35,7 @@ const TaskLi = styled.li`
     `};
     
   input {
-    max-width: 60%;
+    max-width: 80%;
   }
 
   span:last-child {
@@ -47,8 +47,14 @@ const TaskLi = styled.li`
     justify-content: space-around;
 
     button {
+      background-color: #fff;
+      border: none;
+      padding: 0.2rem;
+      border-radius: 500px;
+      
       :hover {
         cursor: pointer;
+        background-color: #bbb;
       }
 
       svg {
