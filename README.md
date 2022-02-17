@@ -1,6 +1,6 @@
 # Desafio Ebytr
 
-![ToDoList](https://user-images.githubusercontent.com/82068881/154407095-c6c55f5e-8a7e-419e-bd50-7619694f6ca3.png)
+![ToDoList2](https://user-images.githubusercontent.com/82068881/154502329-3edf6693-3b48-49a6-9aa0-10a66f44250a.png)
 
 Página desenvolvida em React para o desafio técnico do processo seletivo de Pessoa Desenvolvedora FullStack na empresa Raro Ebytr.
 
