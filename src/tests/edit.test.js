@@ -13,6 +13,12 @@ jest.mock('axios', () => ({
   put: jest.fn(() => Promise.resolve()),
 }));
 
+const formElements = () => {
+  const errorMessage = screen.getByTestId('error-message');
+
+  return { errorMessage };
+};
+
 const taskItemsElements = (index) => {
   const taskDescription = screen.queryByTestId(`task-description-${index}`);
   const taskEditInput = screen.queryByTestId(`task-description-input-${index}`);
@@ -82,6 +88,48 @@ describe('4 - Fluxo de edição de tarefas', () => {
 
     afterEach(() => {
       jest.clearAllMocks()
+    });
+
+      
+    it('Exibe mensagem de erro "Houve um problema ao editar a tarefa" caso haja problemas na requisição', async () => {
+      axios.put.mockImplementationOnce(() =>
+        Promise.reject(),
+      );
+
+      const { errorMessage } = formElements();
+
+      const { taskDescription, editBtn } = taskItemsElements(0);
+
+      expect(axios.post).not.toHaveBeenCalled();
+      expect(taskDescription).toHaveTextContent('Fazer compras');
+      userEvent.click(editBtn);
+
+      const { taskEditInput, finishBtn } = taskItemsElements(0);
+      userEvent.clear(taskEditInput)
+      userEvent.type(taskEditInput, 'Ir ao mercado');
+      userEvent.click(finishBtn);
+
+      await waitFor(() => {
+        expect(errorMessage).toHaveTextContent('Houve um problema ao editar a tarefa');
+      });
+    });
+
+    it('Exibe mensagem de erro "Houve um problema ao alterar o status da tarefa" caso haja problemas na requisição', async () => {
+      axios.put.mockImplementationOnce(() =>
+        Promise.reject(),
+      );
+
+      const { errorMessage } = formElements();
+
+      const { taskStatus, ongoingBtn } = taskItemsElements(0);
+
+      expect(axios.post).not.toHaveBeenCalled();
+      expect(taskStatus).toHaveTextContent('Pendente');
+      userEvent.click(ongoingBtn);
+
+      await waitFor(() => {
+        expect(errorMessage).toHaveTextContent('Houve um problema ao alterar o status da tarefa');
+      });
     });
 
     it('É possível editar a descrição de uma tarefa', async () => {

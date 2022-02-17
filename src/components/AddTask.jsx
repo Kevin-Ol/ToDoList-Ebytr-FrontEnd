@@ -41,7 +41,7 @@ function AddTask() {
       <button type="submit" data-testid="add-btn">
         Adicionar
       </button>
-      <p>{errorMessage}</p>
+      <p data-testid="error-message">{errorMessage}</p>
     </form>
   );
 }

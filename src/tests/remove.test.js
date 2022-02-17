@@ -13,6 +13,12 @@ jest.mock('axios', () => ({
   put: jest.fn(() => Promise.resolve()),
 }));
 
+const formElements = () => {
+  const errorMessage = screen.getByTestId('error-message');
+
+  return { errorMessage };
+};
+
 const taskItemsElements = (index) => {
   const taskDescription = screen.queryByTestId(`task-description-${index}`);
   const taskEditInput = screen.queryByTestId(`task-description-input-${index}`);
@@ -67,6 +73,58 @@ describe('3 - Remoção de tarefas', () => {
       createdAt: "2022-02-14T17:12:21.596Z"
     },
   ]
+
+  describe('Exibe mensagem de erro caso haja problemas na requisição', () => {
+    beforeEach(async () => {
+      axios.get.mockImplementationOnce(() =>
+        Promise.resolve({ data: { tasks } }),
+      );
+
+      axios.delete.mockImplementationOnce(() =>
+      Promise.reject(),
+    );
+
+      render(<App />);
+    
+      await waitFor(() => {
+        expect(screen.queryByText("Carregando")).toBe(null);
+      });
+    });
+
+    afterEach(() => {
+      jest.clearAllMocks()
+    });
+
+    it('Exibe mensagem "Houve um problema ao remover a tarefa', async () => {
+      const { errorMessage } = formElements();
+
+      const {     
+        taskDescription,
+        taskStatus,
+        taskDate,
+        readyBtn,
+        ongoingBtn,
+        pendingBtn,
+        editBtn,
+        removeBtn,  } = taskItemsElements(0);
+
+      expect(axios.post).not.toHaveBeenCalled();
+      userEvent.click(removeBtn);
+
+      await waitFor(() => {
+        expect(taskDescription).toBeInTheDocument();
+        expect(taskStatus).toBeInTheDocument();
+        expect(taskDate).toBeInTheDocument();
+        expect(readyBtn).toBeInTheDocument();
+        expect(ongoingBtn).toBeInTheDocument();
+        expect(pendingBtn).toBeInTheDocument();
+        expect(editBtn).toBeInTheDocument();
+        expect(removeBtn).toBeInTheDocument();
+        expect(errorMessage).toHaveTextContent('Houve um problema ao remover a tarefa');
+      });
+
+    });
+  });
 
   describe('Remove item da lista de tarefas corretamente', () => {
     beforeEach(async () => {

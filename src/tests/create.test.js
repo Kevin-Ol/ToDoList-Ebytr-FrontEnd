@@ -17,8 +17,9 @@ const formElements = () => {
   const descriptionInput = screen.getByTestId('description-input');
   const statusInput = screen.getByTestId('status-input');
   const addBtn = screen.getByTestId('add-btn');
+  const errorMessage = screen.getByTestId('error-message');
 
-  return { descriptionInput, statusInput, addBtn };
+  return { descriptionInput, statusInput, addBtn, errorMessage };
 };
 
 const taskItemsElements = (index) => {
@@ -75,6 +76,42 @@ describe('1 - Fluxo para adicionar nova tarefa', () => {
 
       expect(axios.post).not.toHaveBeenCalled();
       expect(taskDate).not.toBeInTheDocument();
+    });
+  });
+
+  describe('Exibe mensagem de erro caso haja problemas na requisição', () => {
+    beforeEach(async () => {
+      axios.get.mockImplementationOnce(() =>
+        Promise.resolve({ data: { tasks: [] } }),
+      );
+
+      axios.post.mockImplementationOnce(() =>
+        Promise.reject(),
+    );
+
+      render(<App />);
+    
+      await waitFor(() => {
+        expect(screen.queryByText("Carregando")).toBe(null);
+      });
+    });
+
+    afterEach(() => {
+      jest.clearAllMocks()
+    });
+
+    it('Exibe mensagem "Houve um problema ao cadastrar a tarefa', async () => {
+      const { descriptionInput, addBtn, errorMessage } = formElements();
+
+      userEvent.type(descriptionInput, 'Fazer compras');
+      userEvent.click(addBtn);
+
+
+      expect(axios.post).toHaveBeenCalledTimes(1);
+
+      await waitFor(() => {
+        expect(errorMessage).toHaveTextContent('Houve um problema ao cadastrar a tarefa');
+      });
     });
   });
 

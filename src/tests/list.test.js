@@ -13,6 +13,12 @@ jest.mock('axios', () => ({
   put: jest.fn(() => Promise.resolve()),
 }));
 
+const formElements = () => {
+  const errorMessage = screen.getByTestId('error-message');
+
+  return { errorMessage };
+};
+
 const taskItemsElements = (index) => {
   const taskDescription = screen.queryByTestId(`task-description-${index}`);
   const taskEditInput = screen.queryByTestId(`task-description-input-${index}`);
@@ -67,6 +73,32 @@ describe('2 - Renderização de tarefas', () => {
       createdAt: "2022-02-14T17:12:21.596Z"
     },
   ]
+
+  describe('Exibe mensagem de erro caso haja problemas na requisição', () => {
+    beforeEach(async () => {
+      axios.get.mockImplementationOnce(() =>
+        Promise.reject(),
+    );
+
+      render(<App />);
+
+      await waitFor(() => {
+        expect(screen.queryByText("Carregando")).toBeInTheDocument();
+      });
+    });
+
+    afterEach(() => {
+      jest.clearAllMocks()
+    });
+
+    it('Exibe mensagem "Falha ao carregar tarefas', async () => {
+      const { errorMessage } = formElements();
+
+      await waitFor(() => {
+        expect(errorMessage).toHaveTextContent('Falha ao carregar tarefas');
+      });
+    });
+  });
 
   describe('Renderiza todas os itens das tarefas corretamente', () => {
     beforeEach(async () => {
