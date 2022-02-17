@@ -7,7 +7,7 @@ Página desenvolvida em React para o desafio técnico do processo seletivo de Pe
 A página consiste em uma lista de tarefas, onde é possível adicionar, remover, listar e editar tarefas, que estão armazenadas em um banco de dados MongoDB. Para que
 o projeto funcione corretamente, é necessário manter o servidor Back-End funcionando. O Back-End do projeto pode ser acessado [aqui](https://github.com/Kevin-Ol/ToDoList-Ebytr-BackEnd).
 
-A Página foi desenvolvida utilizando o framework React, Styled COmponents para estilização e React Testing Library para realizar testes de integração.
+A Página foi desenvolvida utilizando o framework React, Styled Components para estilização e React Testing Library para realizar testes de integração.
 
 ## Instruções para reproduzir o projeto localmente
 
