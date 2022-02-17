@@ -1,6 +1,7 @@
 import React from 'react';
 import useTasks from '../hooks/useTasks';
 import TaskItem from './TaskItem';
+import TaskLi from './taskItemStyles';
 
 function TasksList() {
   const { tasksList, loading } = useTasks();
@@ -11,6 +12,12 @@ function TasksList() {
 
   return (
     <ul>
+      <TaskLi header>
+        <span>Descrição</span>
+        <span>Status</span>
+        <span>Data</span>
+        <span>Ações</span>
+      </TaskLi>
       {tasksList.map(({
         description, status, createdAt, _id: id,
       }, index) => (

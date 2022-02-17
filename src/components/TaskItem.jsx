@@ -1,7 +1,13 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
+import { IoCheckmarkDone, IoPlayCircleOutline } from 'react-icons/io5';
+import { IoMdHourglass } from 'react-icons/io';
+import { FiEdit } from 'react-icons/fi';
+import { TiDeleteOutline } from 'react-icons/ti';
+import { MdOutlineDone } from 'react-icons/md';
 import useTasks from '../hooks/useTasks';
+import TaskLi from './taskItemStyles';
 
 function TaskItem({
   description, status, createdAt, id, index,
@@ -20,7 +26,7 @@ function TaskItem({
   };
 
   return (
-    <li>
+    <TaskLi status={status}>
       { !editMode && (
         <span data-testid={`task-description-${index}`}>{description}</span>
       )}
@@ -39,57 +45,65 @@ function TaskItem({
       <span data-testid={`task-date-${index}`}>
         {moment(createdAt).format('DD/MM/YYYY, HH:mm')}
       </span>
-      { !editMode && (
+      <div>
+        { !editMode && (
         <>
           <button
             type="button"
             onClick={() => changeStatus('Pronto')}
             data-testid={`ready-btn-${index}`}
+            title="Pronto"
           >
-            Pronto
+            <IoCheckmarkDone />
           </button>
           <button
             type="button"
             onClick={() => changeStatus('Em andamento')}
             data-testid={`ongoing-btn-${index}`}
+            title="Em andamento"
           >
-            Em andamento
+            <IoPlayCircleOutline />
           </button>
           <button
             type="button"
             onClick={() => changeStatus('Pendente')}
             data-testid={`pending-btn-${index}`}
+            title="Pendente"
           >
-            Pendente
+            <IoMdHourglass />
           </button>
           <button
             type="button"
             onClick={() => setEditMode(!editMode)}
             data-testid={`edit-btn-${index}`}
+            title="Editar"
           >
-            Editar
+            <FiEdit />
           </button>
           <button
             type="button"
             onClick={() => removeTask(id)}
             data-testid={`remove-btn-${index}`}
+            title="Remover"
           >
-            Remover
+            <TiDeleteOutline />
           </button>
         </>
 
-      )}
+        )}
 
-      { editMode && (
-      <button
-        type="button"
-        onClick={finishEdit}
-        data-testid={`finish-btn-${index}`}
-      >
-        Finalizar
-      </button>
-      )}
-    </li>
+        { editMode && (
+        <button
+          type="button"
+          onClick={finishEdit}
+          data-testid={`finish-btn-${index}`}
+          title="Finalizar"
+        >
+          <MdOutlineDone />
+        </button>
+        )}
+      </div>
+    </TaskLi>
   );
 }
 export default TaskItem;

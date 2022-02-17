@@ -1,18 +1,10 @@
 import React from 'react';
-import AddTask from './components/AddTask';
-import TasksList from './components/TasksList';
-import Filters from './components/Filters';
-import { TasksContextProvider } from './contexts/TasksContext';
+import Task from './pages/Task';
+import './App.css';
 
 function App() {
   return (
-    <main>
-      <TasksContextProvider>
-        <AddTask />
-        <Filters />
-        <TasksList />
-      </TasksContextProvider>
-    </main>
+    <Task />
   );
 }
 
